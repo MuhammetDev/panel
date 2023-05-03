@@ -1,0 +1,54 @@
+<?php require 'inc/_global/config.php'; ?>
+<?php require 'inc/_global/views/head_start.php'; ?>
+<?php require 'inc/_global/views/head_end.php'; ?>
+<?php require 'inc/_global/views/page_start.php'; ?>
+<?php 
+require 'inc/_global/token.php';
+require 'inc/_global/user.php';
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+	$ip = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+	$ip = $_SERVER['REMOTE_ADDR'];
+}
+$ip = substr_replace($ip, '**', -2);
+$date = time();
+$ua = $_SERVER['HTTP_USER_AGENT'];
+$req = $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+die($req);
+$stmt = $conn->prepare("INSERT INTO errors (username, requestedURL, ip, date, userAgent) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("sssis", $username, $req, $message, $ip, $date, $ua);
+$stmt->execute();
+?>
+<!-- Page Content -->
+<div class="hero">
+  <div class="hero-inner text-center">
+    <div class="bg-body-extra-light">
+      <div class="content content-full">
+        <div class="py-4">
+          <!-- Error Header -->
+          <h1 class="display-1 fw-bolder text-default">
+            404
+          </h1>
+          <h2 class="h4 fw-normal text-muted mb-5">
+          Üzgünüz ama aradığınız sayfa bulunamadı..
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div class="content content-full text-muted fs-sm fw-medium">
+      <!-- Error Footer -->
+      <p class="mb-1">
+        Bu konuda bizi bilgilendirmek ister misiniz?
+      </p>
+      <a class="link-fx" href="javascript:void(0)">Bildir</a> yada <a class="link-fx" href="dashboard.jsp">Panele Dön</a>
+      <!-- END Error Footer -->
+    </div>
+  </div>
+</div>
+<!-- END Page Content -->
+
+<?php require 'inc/_global/views/page_end.php'; ?>
+<?php require 'inc/_global/views/footer_start.php'; ?>
+<?php require 'inc/_global/views/footer_end.php'; ?>
